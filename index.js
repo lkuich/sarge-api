@@ -7,11 +7,17 @@ const cookieParser = require('cookie-parser')
 const admin = require('firebase-admin')
 const WooComOrders = require('./woocom')
 
-if (process.env.ENV === 'prod')
+const { ENV, FIREBASE_PROJECT_ID, FIREBASE_DB_URL } = process.env
+
+if (ENV === 'prod')
   admin.initializeApp({
     credential: admin.credential.applicationDefault(),
   })
-else admin.initializeApp()
+else
+  admin.initializeApp({
+    projectId: FIREBASE_PROJECT_ID,
+    databaseURL: FIREBASE_DB_URL,
+  })
 
 const db = admin.firestore()
 
