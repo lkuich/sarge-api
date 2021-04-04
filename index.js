@@ -7,17 +7,22 @@ const cookieParser = require('cookie-parser')
 const admin = require('firebase-admin')
 const WooComOrders = require('./woocom')
 
+const serviceAccount = require('./sarge-firestore-config.json')
+
 const { ENV, FIREBASE_PROJECT_ID, FIREBASE_DB_URL } = process.env
 
 if (ENV === 'prod')
   admin.initializeApp({
     credential: admin.credential.applicationDefault(),
   })
-else
+else {
+  console.log('Init in dev mode')
+
   admin.initializeApp({
-    projectId: FIREBASE_PROJECT_ID,
+    credential: admin.credential.cert(serviceAccount),
     databaseURL: FIREBASE_DB_URL,
   })
+}
 
 const db = admin.firestore()
 
@@ -32,17 +37,20 @@ app.get('/', (req, res) => {
   res.send(200)
 })
 
-const logEvent = async (event, cookies, body = {}) => {
+const logEvent = async (id, event, body = {}) => {
   // Cookies will be timestamped, compare the timestamp on the cookie and
   // when this request came in to determine the latency of this event
 
-  const { timezone } = body
+  const { aff, ref, exp, date } = body
 
-  console.log(body)
-
-  const { sarge_aff, sarge_ref } = cookies
-
-  // TODO: Store in: process.env.CLIENT/sales/saletimestamp
+  return db.collection('sites').doc(id).collection('visits').doc().set({
+    event,
+    aff,
+    ref,
+    exp,
+    date,
+    serverTime: new Date(),
+  })
 }
 
 app.get('/woo', async (req, res) => {
@@ -51,14 +59,15 @@ app.get('/woo', async (req, res) => {
 })
 
 app.post('/atc', async (req, res) => {
-  console.log(req.body)
-  await logEvent('atc', req.cookies, req.body)
+  const { id } = req.query
+  await logEvent(id, 'atc', req.body)
 
-  res.send('There was a sale!')
+  res.send('There was an ATC!')
 })
 
 app.post('/purchase', async (req, res) => {
-  await logEvent('purchase', req.cookies, req.body)
+  const { id } = req.query
+  await logEvent(id, 'purchase', req.body)
 
   res.send('There was a sale!')
 })

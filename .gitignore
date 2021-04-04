@@ -1,4 +1,5 @@
 .env
+sarge-firestore-config.json
 
 # OS X
 .DS_Store*
