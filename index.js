@@ -60,7 +60,7 @@ app.post('/purchase', async (req, res) => {
   }
 })
 
-if (ENV.toLowerCase() === 'dev') {
+if (ENV === 'local') {
   app.listen(port, () => {
     const port = 3000
     console.log(`Listening at http://localhost:${port}`)
