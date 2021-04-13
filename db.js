@@ -2,14 +2,25 @@ const { Pool } = require('pg')
 
 const { DB_DATABASE, DB_HOST, DB_USER, DB_PASS, DB_PORT } = process.env
 
-const pool = new Pool({
-  max: 10,
-  database: DB_DATABASE,
-  host: DB_HOST,
-  user: DB_USER,
-  password: DB_PASS,
-  port: DB_PORT,
-})
+let pool
+if (ENV === 'local') {
+  pool = new Pool({
+    max: 10,
+    database: DB_DATABASE,
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASS,
+    port: DB_PORT,
+  })
+} else {
+  pool = new Pool({
+    max: 10,
+    database: DB_DATABASE,
+    socketPath: DB_SOCKET,
+    user: DB_USER,
+    password: DB_PASS,
+  })
+}
 
 pool.on('error', async (err, client) => {
   console.error('Unexpected error on idle client', err) // your callback here
