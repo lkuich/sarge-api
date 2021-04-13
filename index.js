@@ -45,6 +45,7 @@ app.post('/atc', async (req, res) => {
 
     res.json({ success: true, event: 'atc' })
   } catch (e) {
+    console.error(e)
     res.status(500).send({ success: false })
   }
 })
@@ -56,6 +57,7 @@ app.post('/purchase', async (req, res) => {
 
     res.json({ success: true, event: 'purchase' })
   } catch (e) {
+    console.error(e)
     res.status(500).send({ success: false })
   }
 })

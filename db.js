@@ -42,7 +42,6 @@ const logEntry = (site, { event, aff, platform, exp, date }) => {
     INSERT INTO logging (site_id, event, aff, platform, exp, date)
     VALUES(${site}, '${event}', ${aff}, '${platform}', '${exp}', '${date}');`
 
-  console.log(q)
   return pool.query(q)
 }
 
