@@ -1,6 +1,6 @@
 const { Pool } = require('pg')
 
-const { DB_DATABASE, DB_HOST, DB_USER, DB_PASS, DB_PORT } = process.env
+const { ENV, DB_DATABASE, DB_HOST, DB_USER, DB_PASS, DB_PORT } = process.env
 
 let pool
 if (ENV === 'local') {
