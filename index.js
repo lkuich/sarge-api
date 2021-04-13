@@ -1,5 +1,7 @@
 require('dotenv').config()
 
+const { ENV } = process.env
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -9,7 +11,6 @@ const cookieParser = require('cookie-parser')
 const { logEntry } = require('./db')
 
 const app = express()
-const port = 3000
 
 app.use(cors())
 app.use(cookieParser())
@@ -59,6 +60,11 @@ app.post('/purchase', async (req, res) => {
   }
 })
 
-app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}`)
-})
+if (ENV.toLowerCase() === 'dev') {
+  app.listen(port, () => {
+    const port = 3000
+    console.log(`Listening at http://localhost:${port}`)
+  })
+}
+
+exports.app = app
