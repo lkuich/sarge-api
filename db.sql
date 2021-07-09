@@ -1,6 +1,6 @@
 CREATE TYPE platform AS ENUM ('facebook', 'snap', 'instagram', 'tiktok');
 
-CREATE TABLE sites (
+CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL
@@ -14,7 +14,7 @@ CREATE TABLE affiliates (
 
 CREATE TABLE logging (
     id SERIAL PRIMARY KEY,
-    site_id INTEGER NOT NULL REFERENCES sites(id),
+    site_id INTEGER NOT NULL REFERENCES clients(id),
     event VARCHAR(100) NOT NULL,
     aff INTEGER REFERENCES affiliates(id),
     platform PLATFORM,

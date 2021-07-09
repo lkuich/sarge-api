@@ -1,12 +1,11 @@
 require('dotenv').config()
 
-const { ENV } = process.env
+const { ENV, PORT } = process.env
 
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-// const WooComOrders = require('./woocom')
 
 const { logEntry } = require('./db')
 
@@ -31,11 +30,6 @@ const logEvent = async (siteId, event, body = {}) => {
     date,
   })
 }
-
-// app.get('/woo', async (req, res) => {
-//   const results = await WooComOrders()
-//   res.json(results)
-// })
 
 app.post('/atc', async (req, res) => {
   const { siteId } = req.query
@@ -63,9 +57,8 @@ app.post('/purchase', async (req, res) => {
 })
 
 if (ENV === 'local') {
-  app.listen(port, () => {
-    const port = 3000
-    console.log(`Listening at http://localhost:${port}`)
+  app.listen(PORT, () => {
+    console.log(`Listening at http://localhost:${PORT}`)
   })
 }
 
