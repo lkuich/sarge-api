@@ -1,4 +1,4 @@
-CREATE TYPE platform AS ENUM ('facebook', 'snap', 'instagram', 'tiktok');
+CREATE TYPE platform AS ENUM ('facebook', 'snap', 'instagram', 'tiktok', 'native');
 
 CREATE TABLE clients (
     id SERIAL PRIMARY KEY,
@@ -18,7 +18,7 @@ CREATE TABLE logging (
     event VARCHAR(100) NOT NULL,
     aff INTEGER REFERENCES affiliates(id),
     platform PLATFORM,
-    exp DATE,
-    date DATE,
+    exp TIMESTAMP,
+    date TIMESTAMP,
     server_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

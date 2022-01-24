@@ -18,10 +18,10 @@ pool.on('error', async (err, client) => {
   await pool.end()
 })
 
-const logEntry = (site, { event, aff, platform, exp, date }) => {
+const logEntry = (site, { event, aff, platform = 'native', exp, date }) => {
   const q = `
     INSERT INTO logging (site_id, event, aff, platform, exp, date)
-    VALUES(${site}, '${event}', ${aff}, '${platform}', '${exp}', '${date}');`
+    VALUES(${site}, '${event}', ${aff}, '${platform}', '${new Date(exp).toDateString()}', '${new Date(date).toDateString()}');`
 
   return pool.query(q)
 }

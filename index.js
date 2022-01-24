@@ -25,17 +25,30 @@ const logEvent = async (siteId, event, body = {}) => {
   await logEntry(siteId, {
     event,
     aff,
-    platform: platform.toLowerCase(),
+    platform: platform?.toLowerCase(),
     exp,
-    date,
+    date
   })
 }
 
-app.post('/atc', async (req, res) => {
-  const { siteId } = req.query
+app.get('/pageView', async (req, res) => {
+  const { id } = req.query
 
   try {
-    await logEvent(siteId, 'atc', req.body)
+    await logEvent(id, 'pageView', req.query)
+
+    res.json({ success: true, event: 'pageView' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).send({ success: false })
+  }
+})
+
+app.get('/atc', async (req, res) => {
+  const { id } = req.query
+
+  try {
+    await logEvent(id, 'atc', req.query)
 
     res.json({ success: true, event: 'atc' })
   } catch (e) {
@@ -44,10 +57,11 @@ app.post('/atc', async (req, res) => {
   }
 })
 
-app.post('/purchase', async (req, res) => {
-  const { siteId } = req.query
+app.get('/purchase', async (req, res) => {
+  const { id } = req.query
+
   try {
-    await logEvent(siteId, 'purchase', req.body)
+    await logEvent(id, 'purchase', req.query)
 
     res.json({ success: true, event: 'purchase' })
   } catch (e) {
