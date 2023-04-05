@@ -1,23 +1,27 @@
-const { Pool } = require('pg')
+const knex = require("knex")({
+  client: "postgresql",
+  connection: process.env.DATABASE_URL,
+});
 
-const { DATABASE_URL } = process.env
+const logEntry = (site, { event, aff, sess, user, platform = 'native', exp, date, custom }) => {
+  try {
+    const payload = {
+      site_id: site,
+      event,
+      platform,
+      date: new Date(date).toDateString()
+    };
 
-const pool = new Pool({
-  max: 10,
-  connectionString: DATABASE_URL,
-})
+    if (sess) payload.sess = sess;
+    if (user) payload.s_user = user;
+    if (aff) payload.aff = aff;
+    if (exp) payload.exp = new Date(exp).toDateString();
+    if (custom) payload.custom = custom;
 
-pool.on('error', async (err, client) => {
-  console.error('Unexpected error on idle client', err) // your callback here
-  await pool.end()
-})
-
-const logEntry = (site, { event, aff, platform = 'native', exp, date }) => {
-  const q = `
-    INSERT INTO logging (site_id, event, aff, platform, exp, date)
-    VALUES(${site}, '${event}', ${aff}, '${platform}', '${new Date(exp).toDateString()}', '${new Date(date).toDateString()}');`
-
-  return pool.query(q)
+    return knex("logging").insert(payload);
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 exports.logEntry = logEntry

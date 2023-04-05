@@ -2,18 +2,16 @@
 version: '3'
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     depends_on:
       - postgres
     # For dev only for now, disable for staging/prod
     env_file:
       - .env
     environment:
-      DB_DATABASE: sarge_db
-      DB_USER: user
-      DB_PASS: pass
-      DB_PORT: 5432
-      DB_HOST: postgres
+      DATABASE_URL: postgres://user:pass@postgres:5432/sarge_db
       NODE_ENV: local
       PORT: 49828
     ports:

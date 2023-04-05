@@ -20,5 +20,8 @@ CREATE TABLE logging (
     platform PLATFORM,
     exp TIMESTAMP,
     date TIMESTAMP,
+    sess UUID,
+    s_user UUID,
+    custom JSONB,
     server_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

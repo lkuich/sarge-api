@@ -2,6 +2,8 @@ require('dotenv').config()
 
 const { ENV, PORT } = process.env
 
+const port = PORT || "8080";
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
@@ -20,14 +22,17 @@ app.get('/status', (req, res) => {
 })
 
 const logEvent = async (siteId, event, body = {}) => {
-  const { aff, platform, exp, date } = body
+  const { aff, platform, exp, date, sess, user, custom } = body
 
   await logEntry(siteId, {
     event,
     aff,
     platform: platform?.toLowerCase(),
     exp,
-    date
+    date,
+    sess,
+    user,
+    custom
   })
 }
 
@@ -57,6 +62,19 @@ app.get('/atc', async (req, res) => {
   }
 })
 
+app.get('/partialLead', async (req, res) => {
+  const { id } = req.query
+
+  try {
+    await logEvent(id, 'partialLead', req.query)
+
+    res.json({ success: true, event: 'partialLead' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).send({ success: false })
+  }
+})
+
 app.get('/purchase', async (req, res) => {
   const { id } = req.query
 
@@ -70,9 +88,22 @@ app.get('/purchase', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => {
+app.get('/lead', async (req, res) => {
+  const { id } = req.query
+
+  try {
+    await logEvent(id, 'lead', req.query)
+
+    res.json({ success: true, event: 'lead' })
+  } catch (e) {
+    console.error(e)
+    res.status(500).send({ success: false })
+  }
+})
+
+app.listen(port, () => {
   if (ENV === 'local') {
-    console.log(`Listening at http://localhost:${PORT}`)
+    console.log(`Listening at http://localhost:${port}`)
   }
 })
 
