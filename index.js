@@ -18,7 +18,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 
 app.get('/status', (req, res) => {
-  res.send(200)
+  res.sendStatus(200)
 })
 
 const logEvent = async (siteId, event, body = {}) => {
