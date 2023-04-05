@@ -21,13 +21,11 @@ app.get('/status', (req, res) => {
   res.sendStatus(200)
 })
 
-const logEvent = async (siteId, event, body = {}) => {
-  const { aff, platform, exp, date, sess, user, custom } = body
-
+const logEvent = async (siteId, event, { aff, ref, exp, date, sess, user, custom } = {}) => {
   await logEntry(siteId, {
     event,
     aff,
-    platform: platform?.toLowerCase(),
+    ref,
     exp,
     date,
     sess,
