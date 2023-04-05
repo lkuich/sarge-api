@@ -1,16 +1,10 @@
 const { Pool } = require('pg')
 
-const { DB_DATABASE, DB_HOST, DB_USER, DB_PASS, DB_PORT } = process.env
-
-const PORT = DB_PORT || 5432
+const { DATABASE_URL } = process.env
 
 const pool = new Pool({
   max: 10,
-  database: DB_DATABASE,
-  host: DB_HOST,
-  user: DB_USER,
-  password: DB_PASS,
-  port: PORT,
+  connectionString: DATABASE_URL,
 })
 
 pool.on('error', async (err, client) => {
