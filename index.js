@@ -70,10 +70,10 @@ app.get('/purchase', async (req, res) => {
   }
 })
 
-if (ENV === 'local') {
-  app.listen(PORT, () => {
+app.listen(PORT, () => {
+  if (ENV === 'local') {
     console.log(`Listening at http://localhost:${PORT}`)
-  })
-}
+  }
+})
 
 exports.app = app
