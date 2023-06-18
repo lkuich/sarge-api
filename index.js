@@ -99,6 +99,19 @@ app.get('/lead', async (req, res) => {
   }
 })
 
+app.post('/any', async (req, res) => {
+  const { id, event, body } = req.body
+
+  try {
+    await logEvent(id, event, body)
+
+    res.json({ success: true, event })
+  } catch (e) {
+    console.error(e)
+    res.status(500).send({ success: false })
+  }
+})
+
 app.listen(port, () => {
   if (ENV === 'local') {
     console.log(`Listening at http://localhost:${port}`)
