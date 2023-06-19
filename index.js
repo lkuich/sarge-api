@@ -27,7 +27,7 @@ const logEvent = async (siteId, event, { aff, ref, exp, date, sess, user, custom
     aff,
     ref,
     exp,
-    date,
+    date: date || new Date(),
     sess,
     user,
     custom
