@@ -112,6 +112,10 @@ app.post('/any', async (req, res) => {
   }
 })
 
+app.get('/healthz', (req, res) => {
+  res.send('ok')
+})
+
 app.listen(port, () => {
   if (ENV === 'local') {
     console.log(`Listening at http://localhost:${port}`)
